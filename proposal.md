@@ -7,8 +7,6 @@ https://github.com/abrivera96/spirograph-art/tree/main
 A program that generates Spirograph Art. You will be allowed to customize the shape, color, and size. Not feeling creative?
 No Worries! It will randomize one for you!
 
-
-
 ## Features
 - Generates Spirographs. 
   This program will create digital art in the form of spirograph shapes. 
@@ -18,11 +16,11 @@ No Worries! It will randomize one for you!
   Lastly, there will be an option that allows the user to bypass cutomization 
   and randomize an output.
 
-  ## Challenges
-  - Randomizing multiple shapes at a time without the program crashing.
-  - I want there to be an animated aspect to this, but will have to research more before I commit to the idea. 
+## Challenges
+- Randomizing multiple shapes at a time without the program crashing.
+- I want there to be an animated aspect to this, but will have to research more before I commit to the idea. 
 
-  ## Outcomes
+## Outcomes
   Ideal Outcome:
   - Ideally, I would like for this program to have an animated aspect to it where the spirograph(s) spin to 
     visually represent spinning flowers.
@@ -30,7 +28,7 @@ No Worries! It will randomize one for you!
   Minimal Viable Outcome:
   - At the very least, I want the program to have the ability to customize and randomize a piece of spirographic art.
 
-  Milestones:
+## Milestones:
   - Week 1
     1. I want to start with a code that can make multiple shapes simultaneously. 
     2. Work on user inputs for user customization. 
