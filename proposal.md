@@ -1,6 +1,7 @@
 # Spirograph Art Generator
 
-## 
+## Repository
+https://github.com/abrivera96/spirograph-art/tree/main
 
 ## Description
 A program that generates Spirograph Art. You will be allowed to customize the shape, color, and size. Not feeling creative?
