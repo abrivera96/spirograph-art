@@ -1,17 +1,25 @@
 import turtle
 
-screen = turtle.Screen()
-screen.bgcolor("black")
-screen.title("Your Custome Spirograph")
+bg_color = "black"
+pen_color = "white"
+pen_width = 1
+speed = 0
 
-artist = turtle.Turtle()
-artist.speed(0)
-artist.width(2)
-artist.color("white")
+def main():
+    screen = turtle.Screen()
+    screen.bgcolor(bg_color)
+    screen.title("Your Custom Spirograph!")
 
-for i in range(36):
-    artist.circle(100)
-    artist.left(10)
-artist.hideturtle()
-turtle.done()
+    artist = turtle.Turtle()
+    artist.speed(speed)
+    artist.width(pen_width)
+    artist.color(pen_color)
 
+    for i in range(36):
+        artist.circle(100)
+        artist.left(10)
+    artist.hideturtle()
+    turtle.done()
+
+if __name__ == "__main__":
+    main()
