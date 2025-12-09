@@ -1,90 +1,109 @@
+from PIL import ImageGrab
+from tkinter import messagebox
 import turtle
 import random
+import math
+
+bg_color = "black"
+pen_width = 2
+speed = 0
 
 
-BG_COLOR = "black"
-PEN_WIDTH = 2
-SPEED = 0
+def get_user_choice(screen):
 
-def get_user_choice():
-    """
-    Asks the user for mode (manual/random).
-    Returns a tuple: (radius, density, color_choice)
-    """
-    print("--- Welcome to the Spirograph Maker ---")
-    mode = input("Do you want 'manual' or 'random' mode? (m/r): ").lower()
+    mode = screen.textinput("Mode Selection", "Mode (manual/random)? (m/r):")
+    
+    if not mode: 
+        mode = "r" 
+    
+    mode = mode.lower()
 
     if mode == "r" or mode == "random":
-        print("Randomizing your art...")
-        radius = random.randint(50, 150)
-        density = random.randint(30, 100)
-        color_choice = random.choice(["red", "green", "blue", "purple", "orange", "cyan", "white", "yellow"])
-        print(f"I picked: Radius={radius}, Density={density}, Color={color_choice}")
-        return radius, density, color_choice
+        radius = random.randint(80, 150)
+        density = random.randint(60, 120)
+        color_choice = random.choice(["red", "green", "blue", "yellow", 
+                                      "cyan", "magenta", "white", "orange"])
+        shape_type = random.choice(["circle", "square", "triangle"])
+        void = random.randint(20, 100)
+        return radius, density, color_choice, shape_type, void
+        
     else:
-        print("Please enter your settings:")
-        radius = int(input("Enter radius (e.g., 100): "))
-        density = int(input("Enter density (e.g., 60): "))
-        color_choice = input("Choose color (red, green, blue, purple, orange, cyan): ").lower()
-        return radius, density, color_choice
+        radius = int(screen.numinput("Radius", "Enter Radius (50-200):", default=100, minval=50, maxval=200))
+        density = int(screen.numinput("Density", "Enter Density (20-100):", default=60, minval=20, maxval=100))
+        
+        color_choice = screen.textinput("Color", "Enter Color (red, blue, cyan, etc.):")
+        if not color_choice: color_choice = "cyan"
+        
+        shape_type = screen.textinput("Shape", "Enter Shape (circle, square, triangle):").lower()
+        if not shape_type: shape_type = "circle"
+
+        void = int(screen.numinput("Gap", "Center Gap distance:", default=40, minval=0, maxval=150))
+        
+        return radius, density, color_choice, shape_type, void 
 
 def setup_artist():
-    """
-    Creates the screen and turtle. 
-    Returns the turtle object (artist).
-    """
-    print("Initializing Turtle...")
-    screen = turtle.Screen()
-    screen.bgcolor(BG_COLOR)
-    screen.title("Python Spirograph")
-    turtle.colormode(255) 
-    
     artist = turtle.Turtle()
-    artist.speed(SPEED)
-    artist.width(PEN_WIDTH)
+    artist.speed(speed)
+    artist.width(pen_width)
     return artist
 
-def set_pen_color(artist, color_choice, shade):
-    """
-    Sets the turtle's color based on the choice and the current shade intensity.
-    """
-    if color_choice == "red":
-        artist.color(shade, 0, 0)
-    elif color_choice == "green":
-        artist.color(0, shade, 0)
-    elif color_choice == "blue":
-        artist.color(0, 0, shade)
-    elif color_choice == "purple":
-        artist.color(shade, 0, shade)
-    elif color_choice == "orange":
-        artist.color(shade, shade // 2, 0)
-    elif color_choice == "cyan":
-        artist.color(0, shade, shade)
-    elif color_choice == "yellow":
-        artist.color(shade, shade, 0)
-    elif color_choice == "white":
-        artist.color(shade, shade, shade)
-    else:
-        artist.color(shade, shade, shade)
+def draw_one_shape(artist, shape_type, size):
+    if shape_type == "circle":
+        artist.circle(size)
+    elif shape_type == "square":
+        for _ in range(4):
+            artist.forward(size)
+            artist.left(90)
+    elif shape_type == "triangle":
+        for _ in range(3):
+            artist.forward(size)
+            artist.left(120)
 
-def draw_spirograph(artist, radius, density, color_choice):
-    """
-    Takes the artist and the data, and performs the drawing.
-    """
+def draw_spirograph(artist, base_radius, density, color_choice, shape_type, void):
+    artist.color(color_choice)
     angle = 360 / density
     
     for i in range(density):
-        shade = int((i / density) * 255)
-        set_pen_color(artist, color_choice, shade)
-        artist.circle(radius)
+        artist.penup()
+        artist.forward(void)
+        artist.pendown()
+        draw_one_shape(artist, shape_type, base_radius)
+        
+        artist.penup()
+        artist.backward(void)
+        artist.pendown()
         artist.left(angle)
 
+def save_as_png():
+    filename = turtle.textinput("Save Art", "Enter file name:")
+    if filename:
+        canvas = turtle.getcanvas()
+        canvas = turtle.getcanvas()
+        x = canvas.winfo_rootx()
+        y = canvas.winfo_rooty()
+        w = canvas.winfo_width()
+        h = canvas.winfo_height()
+
+        box = (x, y, x + w, y+ h)
+        image = ImageGrab.grab(bbox=box)
+        save_path = filename + ".png"
+        image.save(save_path)
+        
+        messagebox.showinfo("Success", f"Saved {save_path} successfully!")
+
 def main():
-    radius, density, color_choice = get_user_choice()
+    screen = turtle.Screen()
+    screen.bgcolor(bg_color)
+    screen.title("Spirograph Maker")
+    radius, density, color_choice, shape_type, void = get_user_choice(screen)
     artist = setup_artist()
-    draw_spirograph(artist, radius, density, color_choice)
+    draw_spirograph(artist, radius, density, color_choice, shape_type, void)
     artist.hideturtle()
-    turtle.done()
+    screen.listen()
+    screen.onkey(save_as_png, "s")
+    screen.onkey(save_as_png, "S")
+
+    screen.exitonclick()
 
 if __name__ == "__main__":
     main()
